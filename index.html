@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>ARKS ONE — Everything You Need</title>
+  <meta name="description" content="Shop electronics, fashion, home products and more at ARKS ONE.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="announcement">Welcome to ARKS ONE · Shop smarter, live better</div>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="ARKS ONE home"><span class="brand-mark">A</span><span>ARKS <b>ONE</b><small>EVERYTHING IN ONE PLACE</small></span></a>
+    <div class="header-actions">
+      <button id="adminOpen" class="text-button" type="button">Store Admin</button>
+      <button id="cartOpen" class="cart-button" type="button">Cart <span id="cartCount">0</span></button>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">YOUR EVERYDAY MARKETPLACE</span>
+        <h1>Everything you need.<br><em>All in one place.</em></h1>
+        <p>Explore useful products for your home, lifestyle and technology needs.</p>
+        <a class="primary-button" href="#shop">Explore products <span>→</span></a>
+        <div class="trust-row"><span>✓ Easy ordering</span><span>✓ WhatsApp support</span><span>✓ Multiple categories</span></div>
+      </div>
+      <div class="hero-art" aria-label="Decorative ARKS ONE shopping graphic">
+        <div class="orb orb-one"></div><div class="orb orb-two"></div>
+        <div class="floating-card card-top">SMART CHOICES <b>✦</b></div>
+        <div class="shopping-bag"><div class="bag-handle"></div><strong>ARKS<br>ONE</strong><span>SHOP SMARTER</span></div>
+        <div class="floating-card card-bottom">DISCOVER MORE <b>↗</b></div>
+      </div>
+    </section>
+
+    <section class="category-section">
+      <div class="section-heading"><div><span class="eyebrow">BROWSE BY INTEREST</span><h2>Shop categories</h2></div><p>Find something for every day.</p></div>
+      <div id="categoryList" class="category-list"></div>
+    </section>
+
+    <section id="shop" class="shop-section">
+      <div class="section-heading"><div><span class="eyebrow">THE COLLECTION</span><h2>Featured products</h2></div><span id="productSummary" class="muted"></span></div>
+      <div class="shop-controls">
+        <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search products..." aria-label="Search products"></label>
+        <select id="categoryFilter" aria-label="Filter by category"><option value="All">All categories</option></select>
+        <select id="sortFilter" aria-label="Sort products"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name: A to Z</option></select>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+      <div id="emptyState" class="empty-state hidden">No products found. Try another search or category.</div>
+    </section>
+
+    <section class="service-banner">
+      <div><span class="eyebrow">MORE THAN SHOPPING</span><h2>Need a service?</h2><p>Ask us about CCTV installation, networking, smart devices and construction services.</p></div>
+      <a id="serviceWhatsApp" class="primary-button" href="#" target="_blank" rel="noopener">Enquire on WhatsApp ↗</a>
+    </section>
+  </main>
+  <footer>
+    <div class="footer-brand">ARKS ONE</div><p>Shop smarter. Live better.</p>
+    <div class="footer-links"><a href="#shop">Shop</a><a href="#services">Services</a><button id="footerContact" type="button">Contact</button></div>
+    <small>© <span id="year"></span> ARKS ONE. Demo store — replace sample details before publishing.</small>
+  </footer>
+
+  <div id="cartDrawer" class="drawer-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+    <div class="drawer">
+      <div class="drawer-heading"><div><span class="eyebrow">YOUR SELECTION</span><h2 id="cartTitle">Shopping cart</h2></div><button class="icon-button" data-close="cartDrawer" aria-label="Close cart">×</button></div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-total"><span>Estimated total</span><strong id="cartTotal">₹0</strong></div>
+      <p class="fine-print">Shipping, availability and final price are confirmed by the store before order acceptance.</p>
+      <button id="checkoutOpen" class="primary-button full-width" type="button">Continue to order</button>
+    </div>
+  </div>
+
+  <div id="checkoutModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="modal">
+      <div class="drawer-heading"><div><span class="eyebrow">ORDER REQUEST</span><h2 id="checkoutTitle">Delivery details</h2></div><button class="icon-button" data-close="checkoutModal" aria-label="Close checkout">×</button></div>
+      <form id="checkoutForm">
+        <label>Full name<input name="name" required autocomplete="name" placeholder="Your name"></label>
+        <label>Mobile number<input name="phone" required inputmode="tel" pattern="[0-9+() -]{8,18}" autocomplete="tel" placeholder="Your phone number"></label>
+        <label>Delivery address<textarea name="address" required rows="3" placeholder="House / street / area / city / PIN code"></textarea></label>
+        <label>Payment preference<select name="payment"><option>Cash on delivery (confirm availability)</option><option>UPI (confirm with seller)</option><option>Contact me to arrange payment</option></select></label>
+        <label>Notes (optional)<textarea name="notes" rows="2" placeholder="Colour, size or other request"></textarea></label>
+        <button class="primary-button full-width" type="submit">Send order request on WhatsApp ↗</button>
+        <p class="fine-print">This demo sends your order request to WhatsApp. It does not charge a payment or automatically confirm stock.</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <div class="modal admin-modal">
+      <div class="drawer-heading"><div><span class="eyebrow">LOCAL DEMO TOOLS</span><h2 id="adminTitle">Store admin</h2></div><button class="icon-button" data-close="adminModal" aria-label="Close admin">×</button></div>
+      <div class="notice"><b>Important:</b> This demo admin saves changes only in this browser on this device. It is not a secure multi-user admin panel and does not sync to other visitors. Do not enter confidential information.</div>
+      <form id="adminForm" class="admin-form">
+        <label>Product name<input name="name" required maxlength="90" placeholder="e.g. USB-C charging cable"></label>
+        <label>Category<select name="category" id="adminCategory" required></select></label>
+        <label>Price (₹)<input name="price" required type="number" min="0" step="1" placeholder="499"></label>
+        <label>Emoji / icon<input name="emoji" maxlength="8" placeholder="📦"></label>
+        <label>Short description<input name="description" maxlength="180" placeholder="A brief product description"></label>
+        <button class="primary-button full-width" type="submit">Add product to this browser</button>
+      </form>
+      <div class="admin-actions"><button id="exportProducts" class="secondary-button" type="button">Export products JSON</button><button id="resetProducts" class="secondary-button danger" type="button">Reset demo products</button></div>
+      <p class="fine-print">Before launch, connect a real database and secure admin authentication to manage a shared store.</p>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
