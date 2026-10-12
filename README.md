@@ -17,3 +17,7 @@
 - This is a static starter, not a production-ready ecommerce platform.
 - No online payment integration, automatic order persistence, shipping integration, or authenticated admin panel is included.
 - Check stock and final price manually before confirming WhatsApp orders.
+
+
+## ARKS ONE visual update
+This version adds the supplied ARKS ONE shopping poster near the top of the home page and updates the brand colors to navy blue and orange. It retains the existing Supabase product-read setup and demo checkout limitations.
