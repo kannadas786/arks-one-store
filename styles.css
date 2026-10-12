@@ -13,3 +13,6 @@
 /* Official ARKS ONE logo image */
 .brand{display:flex;align-items:center;gap:0;flex-shrink:0}.brand-logo{display:block;width:clamp(150px,19vw,230px);max-height:58px;height:auto;object-fit:contain}.brand-mark{display:none!important}
 @media(max-width:600px){.brand-logo{width:clamp(125px,37vw,175px);max-height:48px}}
+
+/* Use the official logo in the footer too */
+.footer-brand{display:flex;justify-content:center;align-items:center}.footer-brand img{display:block;width:min(240px,65vw);height:auto;max-height:90px;object-fit:contain}.footer-brand:after{display:none}
