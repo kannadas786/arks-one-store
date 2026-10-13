@@ -11,7 +11,7 @@
 <body>
   <div class="announcement">Welcome to ARKS ONE · Shop smarter, live better</div>
   <header class="site-header">
-    <a class="brand" href="#" aria-label="ARKS ONE home"><img class="brand-logo-image" src="arks-one-logo.png" alt="ARKS ONE — Shop smarter. Live better."></a>
+    <a class="brand brand-image" href="#" aria-label="ARKS ONE home"><img src="arks-one-logo.png" alt="ARKS ONE — Shop smarter. Live better."></a>
     <div class="header-actions">
       <button id="adminOpen" class="text-button" type="button">Store Admin</button>
       <button id="cartOpen" class="cart-button" type="button">Cart <span id="cartCount">0</span></button>
@@ -20,38 +20,8 @@
   <main>
     <section class="hero-banner" aria-label="ARKS ONE shopping banner">
       <a href="#shop" aria-label="Shop ARKS ONE products">
-        <img src="arks-one-home-banner.png" alt="ARKS ONE — Everything you need in one place. Shop smarter. Live better." fetchpriority="high">
+        <img src="arks-one-home-banner.png" alt="ARKS ONE — Shop smarter, live better. Everything you need in one place." fetchpriority="high">
       </a>
-    </section>
-
-
-    <section class="promo-section" aria-label="Offers and promotions">
-      <div class="section-heading"><div><span class="eyebrow">DON'T MISS OUT</span><h2>Offers at ARKS ONE</h2></div><div class="slide-controls"><button type="button" class="slide-arrow" id="offerPrev" aria-label="Previous offer">‹</button><button type="button" class="slide-arrow" id="offerNext" aria-label="Next offer">›</button></div></div>
-      <div class="offer-slider" id="offerSlider" aria-live="polite">
-        <article class="offer-slide offer-current is-active"><span class="offer-kicker">CURRENT OFFERS</span><h3>Great finds. Smart prices.</h3><p>Explore our latest products and check the current price before ordering.</p><a class="offer-cta" href="#shop">Shop current collection ↗</a></article>
-        <article class="offer-slide offer-coming"><span class="offer-kicker">COMING SOON</span><h3>New offers are on the way.</h3><p>Check back here for upcoming deals, seasonal specials and new arrivals.</p><a class="offer-cta" href="#shop">Explore products ↗</a></article>
-        <article class="offer-slide offer-brands"><span class="offer-kicker">BRAND SPOTLIGHT</span><h3>Your favourites, all in one place.</h3><p>Browse featured brands and discover products for everyday needs.</p><a class="offer-cta" href="#brands">Explore brands ↓</a></article>
-        <div class="offer-dots" id="offerDots" aria-label="Choose offer slide"><button class="offer-dot is-active" aria-label="Slide 1" data-offer-slide="0"></button><button class="offer-dot" aria-label="Slide 2" data-offer-slide="1"></button><button class="offer-dot" aria-label="Slide 3" data-offer-slide="2"></button></div>
-      </div>
-    </section>
-
-    <section class="ad-video-section" aria-label="ARKS ONE advertisement video">
-      <div class="section-heading"><div><span class="eyebrow">MEET ARKS ONE</span><h2>Watch our advertisement</h2></div><span class="muted">Shop smarter. Live better.</span></div>
-      <div class="ad-video-frame">
-        <video id="brandAdVideo" controls playsinline preload="metadata" poster="arks-one-home-banner.png">
-          <source src="arks-one-ad.mp4" type="video/mp4">
-          Your browser does not support HTML video. Add arks-one-ad.mp4 to the website files.
-        </video>
-        <div class="video-help" id="videoHelp"><strong>ARKS ONE brand video</strong><span>Upload your advertisement as <code>arks-one-ad.mp4</code> to this same website folder to show it here.</span></div>
-      </div>
-    </section>
-
-    <section class="brands-section" id="brands" aria-label="Featured brands">
-      <div class="section-heading"><div><span class="eyebrow">BRANDS TO DISCOVER</span><h2>Featured brands</h2></div><div class="slide-controls"><button type="button" class="slide-arrow" id="brandPrev" aria-label="Scroll brands left">‹</button><button type="button" class="slide-arrow" id="brandNext" aria-label="Scroll brands right">›</button></div></div>
-      <div class="brand-track" id="brandTrack" tabindex="0" aria-label="Featured brand list">
-        <div class="brand-tile"><span class="brand-symbol">S</span><strong>Samsung</strong></div><div class="brand-tile"><span class="brand-symbol">A</span><strong>Apple</strong></div><div class="brand-tile"><span class="brand-symbol">SONY</span><strong>Sony</strong></div><div class="brand-tile"><span class="brand-symbol">hp</span><strong>HP</strong></div><div class="brand-tile"><span class="brand-symbol">H</span><strong>Hikvision</strong></div><div class="brand-tile"><span class="brand-symbol">MI</span><strong>Xiaomi</strong></div><div class="brand-tile"><span class="brand-symbol">JBL</span><strong>JBL</strong></div><div class="brand-tile"><span class="brand-symbol">LG</span><strong>LG</strong></div>
-      </div>
-      <p class="brand-note">Brand names are examples for the layout. Keep only brands you actually sell or are authorised to display.</p>
     </section>
 
     <section class="category-section">
@@ -75,10 +45,15 @@
       <a id="serviceWhatsApp" class="primary-button" href="#" target="_blank" rel="noopener">Enquire on WhatsApp ↗</a>
     </section>
   </main>
-  <footer>
-    <div class="footer-brand">ARKS ONE</div><p>Shop smarter. Live better.</p>
-    <div class="footer-links"><a href="#shop">Shop</a><a href="#services">Services</a><button id="footerContact" type="button">Contact</button></div>
-    <small>© <span id="year"></span> ARKS ONE. Demo store — replace sample details before publishing.</small>
+  <footer class="site-footer">
+    <a class="footer-logo" href="#" aria-label="ARKS ONE home"><img src="arks-one-logo.png" alt="ARKS ONE — Shop smarter. Live better."></a>
+    <p class="footer-tagline">Shop smarter. Live better.</p>
+    <div class="footer-contact">
+      <a href="https://wa.me/919080530930?text=Hello%20ARKS%20ONE%2C%20I%20have%20an%20enquiry." target="_blank" rel="noopener">WhatsApp: 9080530930</a>
+      <a href="mailto:saimilatechnovision@gmail.com">saimilatechnovision@gmail.com</a>
+    </div>
+    <div class="footer-links"><a href="#shop">Shop</a><a href="#services">Services</a><button id="footerContact" type="button">Contact on WhatsApp</button></div>
+    <small>© <span id="year"></span> ARKS ONE. Shop smarter. Live better.</small>
   </footer>
 
   <div id="cartDrawer" class="drawer-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cartTitle">

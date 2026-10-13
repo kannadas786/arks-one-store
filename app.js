@@ -2,11 +2,8 @@
    Demo mode: cart/products use this browser's localStorage; orders are sent as a WhatsApp message.
    Before real launch, connect a shared database, secure authentication, stock checks and payment provider. */
 const STORE = {
-  // Public browser settings. Publishable keys are intended for public clients; never put a secret/service_role key here.
-  supabaseUrl: "https://amiajikrgtebxvvlnwyo.supabase.co",
-  supabasePublishableKey: "sb_publishable_vx_SdvP0FR3cnXG0K_R4uQ_TFFpwOE5",
   // Replace with your WhatsApp number including country code, digits only. Example India: 919876543210
-  whatsappNumber: "REPLACE_WITH_YOUR_WHATSAPP_NUMBER",
+  whatsappNumber: "919080530930",
   currency: "INR"
 };
 const categories = [
@@ -39,7 +36,6 @@ const money = (n) => new Intl.NumberFormat("en-IN",{style:"currency",currency:"I
 const load = (key,fallback) => { try { const v=localStorage.getItem(key); return v?JSON.parse(v):fallback; } catch { return fallback; } };
 let products = load("arks_products",starterProducts);
 let cart = load("arks_cart",[]);
-let databaseConnected = false;
 let activeCategory = "All";
 let toastTimer;
 function save(){localStorage.setItem("arks_products",JSON.stringify(products));localStorage.setItem("arks_cart",JSON.stringify(cart));}
@@ -56,7 +52,7 @@ function renderProducts(){
   if(cat!=="All")list=list.filter(p=>p.category===cat);if(q)list=list.filter(p=>(p.name+" "+p.description+" "+p.category).toLowerCase().includes(q));
   const sort=$("#sortFilter").value;if(sort==="low")list.sort((a,b)=>a.price-b.price);if(sort==="high")list.sort((a,b)=>b.price-a.price);if(sort==="name")list.sort((a,b)=>a.name.localeCompare(b.name));
   $("#productSummary").textContent=`${list.length} item${list.length===1?"":"s"}`;
-  $("#productGrid").innerHTML=list.map(p=>`<article class="product-card"><div class="product-visual"><span class="product-tag">${safe(p.tag||p.category)}</span>${p.image_url?`<img class="product-image" src="${safe(p.image_url)}" alt="${safe(p.name)}" loading="lazy" onerror="this.style.display='none'">`:`<span class="emoji">${safe(p.emoji||"📦")}</span>`}</div><div class="product-info"><span class="product-category">${safe(p.category)}</span><h3>${safe(p.name)}</h3><div class="product-description">${safe(p.description||"")}</div><div class="product-bottom"><span class="price">${Number(p.price)===0?"Ask for quote":money(p.price)}</span><button class="add-button" data-add="${safe(p.id)}">${Number(p.price)===0?"Enquire":"Add +"}</button></div></div></article>`).join("");
+  $("#productGrid").innerHTML=list.map(p=>`<article class="product-card"><div class="product-visual"><span class="product-tag">${safe(p.tag||p.category)}</span><span class="emoji">${safe(p.emoji||"📦")}</span></div><div class="product-info"><span class="product-category">${safe(p.category)}</span><h3>${safe(p.name)}</h3><div class="product-description">${safe(p.description||"")}</div><div class="product-bottom"><span class="price">${Number(p.price)===0?"Ask for quote":money(p.price)}</span><button class="add-button" data-add="${safe(p.id)}">${Number(p.price)===0?"Enquire":"Add +"}</button></div></div></article>`).join("");
   $("#emptyState").classList.toggle("hidden",list.length!==0);
 }
 function renderCart(){
@@ -106,29 +102,4 @@ document.querySelectorAll(".modal-backdrop,.drawer-backdrop").forEach(el=>el.add
 $("#serviceWhatsApp").addEventListener("click",e=>{if(STORE.whatsappNumber.includes("REPLACE")){e.preventDefault();toast("Set your WhatsApp number in app.js first.");}else e.currentTarget.href=`https://wa.me/${STORE.whatsappNumber}?text=${encodeURIComponent("Hello ARKS ONE, I would like to enquire about your services.")}`;});
 $("#footerContact").addEventListener("click",()=>sendWhatsApp("Hello ARKS ONE, I have a question."));
 $("#year").textContent=new Date().getFullYear();
-async function loadSupabaseProducts(){
-  if(!STORE.supabaseUrl || !STORE.supabasePublishableKey) return;
-  try {
-    const response = await fetch(`${STORE.supabaseUrl}/rest/v1/products?select=*&is_active=eq.true&order=created_at.desc`, {
-      headers: { apikey: STORE.supabasePublishableKey, Authorization: `Bearer ${STORE.supabasePublishableKey}` }
-    });
-    if(!response.ok) throw new Error(`Supabase returned ${response.status}`);
-    const rows = await response.json();
-    products = rows.map(row => ({
-      id: String(row.id), name: row.name || "Unnamed product", description: row.description || "",
-      category: categories.some(c=>c.name===row.category) ? row.category : (row.category || "More"),
-      price: Number(row.price || 0), original_price: row.original_price == null ? null : Number(row.original_price),
-      image_url: row.image_url || "", stock_quantity: Number(row.stock_quantity || 0),
-      emoji: "📦", tag: row.product_type || "ARKS ONE"
-    }));
-    databaseConnected = true;
-    renderCategories(); renderProducts(); renderCart();
-    const status = document.querySelector("#databaseStatus"); if(status) status.textContent = `Live catalogue connected · ${products.length} product(s)`;
-    if(!products.length) toast("Supabase is connected, but there are no active products yet.");
-  } catch(error) {
-    console.error("Supabase product load failed:", error);
-    const status = document.querySelector("#databaseStatus"); if(status) status.textContent = "Showing demo products · database connection needs checking";
-  }
-}
 renderCategories();renderProducts();renderCart();
-loadSupabaseProducts();
