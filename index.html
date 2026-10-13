@@ -119,7 +119,38 @@
       <div id="emptyState" class="empty-state hidden">No products found. Try another search or category.</div>
     </section>
 
-    <section class="service-banner">
+    <div class="product-details-modal hidden" id="productDetailsModal" role="dialog" aria-modal="true" aria-labelledby="detailProductName">
+    <button class="product-details-close" type="button" data-product-close aria-label="Close product details">×</button>
+    <div class="product-details-panel">
+      <button class="detail-image-button" type="button" id="detailImageZoom" aria-label="Enlarge product image">
+        <img id="detailProductImage" src="" alt="">
+        <span class="zoom-hint">Tap image to enlarge</span>
+      </button>
+      <div class="product-details-copy">
+        <span id="detailProductCategory" class="product-category"></span>
+        <h2 id="detailProductName"></h2>
+        <div class="detail-price-row"><strong id="detailProductPrice"></strong><del id="detailOriginalPrice"></del><span id="detailDiscount" class="detail-discount"></span></div>
+        <p id="detailProductDescription"></p>
+        <div class="detail-variants">
+          <div class="detail-variant-group" id="detailSizeGroup">
+            <label for="detailProductSize">Size</label>
+            <select id="detailProductSize"><option value="">Select size</option></select>
+          </div>
+          <div class="detail-variant-group" id="detailColorGroup">
+            <label for="detailProductColor">Colour</label>
+            <select id="detailProductColor"><option value="">Select colour</option></select>
+          </div>
+        </div>
+        <p id="detailProductStock" class="detail-stock"></p>
+        <div class="detail-actions"><button type="button" id="detailAddToCart" class="primary-button">Add to Cart</button><button type="button" id="detailWhatsApp" class="secondary-button">Ask on WhatsApp</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="image-zoom-modal hidden" id="imageZoomModal" role="dialog" aria-modal="true" aria-label="Enlarged product image">
+    <button type="button" class="zoom-close" data-zoom-close aria-label="Close enlarged image">×</button>
+    <img id="zoomedProductImage" src="" alt="">
+  </div>
+  <section class="service-banner">
       <div><span class="eyebrow">MORE THAN SHOPPING</span><h2>Need a service?</h2><p>Ask us about CCTV installation, networking, smart devices and construction services.</p></div>
       <a id="serviceWhatsApp" class="primary-button" href="#" target="_blank" rel="noopener">Enquire on WhatsApp ↗</a>
     </section>

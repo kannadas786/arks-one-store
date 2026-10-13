@@ -47,12 +47,21 @@ function renderCategories(){
   $("#adminCategory").innerHTML=categories.map(c=>`<option value="${safe(c.name)}">${safe(c.name)}</option>`).join("");
   $("#categoryFilter").value=activeCategory;
 }
+function productImage(p){
+  if(p.image_url) return p.image_url;
+  const name=String(p.name||"").toLowerCase();
+  // Public sample photos used only when a product has no image_url. Replace with official supplier photos for exact models.
+  if(name.includes("earbud")) return "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=900&q=85";
+  if(name.includes("bulb")) return "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=900&q=85";
+  if(name.includes("cable")) return "https://images.unsplash.com/photo-1615526675159-e248c3021d3f?auto=format&fit=crop&w=900&q=85";
+  return "";
+}
 function renderProducts(){
   let list=[...products];const q=$("#searchInput").value.trim().toLowerCase();const cat=$("#categoryFilter").value;
   if(cat!=="All")list=list.filter(p=>p.category===cat);if(q)list=list.filter(p=>(p.name+" "+p.description+" "+p.category).toLowerCase().includes(q));
   const sort=$("#sortFilter").value;if(sort==="low")list.sort((a,b)=>a.price-b.price);if(sort==="high")list.sort((a,b)=>b.price-a.price);if(sort==="name")list.sort((a,b)=>a.name.localeCompare(b.name));
   $("#productSummary").textContent=`${list.length} item${list.length===1?"":"s"}`;
-  $("#productGrid").innerHTML=list.map(p=>`<article class="product-card"><div class="product-visual"><span class="product-tag">${safe(p.tag||p.category)}</span><span class="emoji">${safe(p.emoji||"📦")}</span></div><div class="product-info"><span class="product-category">${safe(p.category)}</span><h3>${safe(p.name)}</h3><div class="product-description">${safe(p.description||"")}</div><div class="product-bottom"><span class="price">${Number(p.price)===0?"Ask for quote":money(p.price)}</span><button class="add-button" data-add="${safe(p.id)}">${Number(p.price)===0?"Enquire":"Add +"}</button></div></div></article>`).join("");
+  $("#productGrid").innerHTML=list.map(p=>{const image=productImage(p);const original=Number(p.original_price)||0;const discount=original>Number(p.price)&&original>0?Math.round((original-Number(p.price))*100/original):0;return `<article class="product-card" data-product-detail="${safe(p.id)}" tabindex="0" role="button" aria-label="View details for ${safe(p.name)}"><div class="product-visual"><span class="product-tag">${safe(p.tag||p.category)}</span>${image?`<img class="product-image" src="${safe(image)}" alt="${safe(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling?.classList.remove('hidden')"><span class="emoji hidden">${safe(p.emoji||"📦")}</span>`:`<span class="emoji">${safe(p.emoji||"📦")}</span>`}</div><div class="product-info"><span class="product-category">${safe(p.category)}</span><h3>${safe(p.name)}</h3><div class="product-description">${safe(p.description||"")}</div><div class="product-bottom"><span class="price">${Number(p.price)===0?"Ask for quote":money(p.price)}</span><button class="add-button" data-add="${safe(p.id)}" type="button">${Number(p.price)===0?"Enquire":"Add +"}</button></div></div></article>`}).join("");
   $("#emptyState").classList.toggle("hidden",list.length!==0);
 }
 function renderCart(){
@@ -62,13 +71,80 @@ function renderCart(){
 }
 function openModal(id){$("#"+id).classList.remove("hidden");document.body.style.overflow="hidden";}
 function closeModal(id){$("#"+id).classList.add("hidden");if(!document.querySelector(".modal-backdrop:not(.hidden),.drawer-backdrop:not(.hidden)"))document.body.style.overflow="";}
+
+
+function variantValues(p, key){
+  const raw = p[key] ?? p[key === "sizes" ? "size_options" : "color_options"] ?? "";
+  if(Array.isArray(raw)) return raw.map(v=>String(v).trim()).filter(Boolean);
+  if(typeof raw === "string" && raw.trim()) return raw.split(/[,|;]/).map(v=>v.trim()).filter(Boolean);
+  return [];
+}
+function fillVariantSelect(id, values, placeholder, groupId){
+  const select=$("#"+id), group=$("#"+groupId);
+  if(!select||!group)return;
+  if(!values.length){group.classList.add("hidden");select.innerHTML=`<option value="">${placeholder}</option>`;return;}
+  group.classList.remove("hidden");
+  select.innerHTML=`<option value="">${placeholder}</option>`+values.map(v=>`<option value="${safe(v)}">${safe(v)}</option>`).join("");
+  select.value="";
+}
+function openProductDetails(id){
+  const p=products.find(x=>String(x.id)===String(id));if(!p)return;
+  const modal=$("#productDetailsModal"),img=$("#detailProductImage"),image=productImage(p);
+  $("#detailProductName").textContent=p.name||"Product";
+  $("#detailProductCategory").textContent=p.category||"";
+  $("#detailProductDescription").textContent=p.description||"Product details will be updated soon.";
+  $("#detailProductPrice").textContent=Number(p.price)===0?"Ask for quote":money(p.price);
+  const original=Number(p.original_price)||0;
+  $("#detailOriginalPrice").textContent=original>Number(p.price)?money(original):"";
+  $("#detailDiscount").textContent=original>Number(p.price)?`${Math.round((original-Number(p.price))*100/original)}% OFF`:"";
+  const stock=Number(p.stock_quantity);
+  $("#detailProductStock").textContent=Number.isFinite(stock)?(stock>0?`In stock: ${stock} available`:"Stock availability: please enquire"):"Stock availability: please enquire";
+  img.src=image||"";img.alt=p.name||"Product image";img.style.display=image?"block":"none";
+  $("#detailImageZoom").style.display=image?"flex":"none";
+  const category=String(p.category||"").toLowerCase();
+  let sizes=variantValues(p,"sizes");
+  let colors=variantValues(p,"colors");
+  if(!sizes.length && /(fashion|clothing|apparel|shoe|footwear)/.test(category)) sizes=["XS","S","M","L","XL","XXL"];
+  if(!colors.length && /(fashion|clothing|apparel|shoe|footwear)/.test(category)) colors=["Black","White","Blue","Red","Green"];
+  fillVariantSelect("detailProductSize",sizes,"Select size","detailSizeGroup");
+  fillVariantSelect("detailProductColor",colors,"Select colour","detailColorGroup");
+  $("#detailAddToCart").textContent=Number(p.price)===0?"Enquire on WhatsApp":"Add to Cart";
+  $("#detailAddToCart").onclick=()=>{
+    const size=$("#detailProductSize")?.value||"";
+    const color=$("#detailProductColor")?.value||"";
+    if(sizes.length&&!size){toast("Please select a size.");return;}
+    if(colors.length&&!color){toast("Please select a colour.");return;}
+    const selected=[size?`Size: ${size}`:"",color?`Colour: ${color}`:""].filter(Boolean).join(" · ");
+    if(selected)toast(`Selected ${selected}.`);
+    addToCart(String(p.id));
+    if(Number(p.price)!==0)closeProductDetails();
+  };
+  $("#detailWhatsApp").onclick=()=>{
+    const size=$("#detailProductSize")?.value||"";
+    const color=$("#detailProductColor")?.value||"";
+    const selected=[size?`Size: ${size}`:"",color?`Colour: ${color}`:""].filter(Boolean).join("\n");
+    if(sizes.length&&!size){toast("Please select a size.");return;}
+    if(colors.length&&!color){toast("Please select a colour.");return;}
+    sendWhatsApp(`Hello ARKS ONE, I would like to enquire about ${p.name}.\n${selected}\nPrice: ${Number(p.price)===0?"Please quote":money(p.price)}. Please share availability.`);
+  };
+  modal.classList.remove("hidden");document.body.style.overflow="hidden";
+}
+function closeProductDetails(){const modal=$("#productDetailsModal");if(modal)modal.classList.add("hidden");if(!document.querySelector(".modal-backdrop:not(.hidden),.drawer-backdrop:not(.hidden),.video-modal:not(.hidden),.image-zoom-modal:not(.hidden)"))document.body.style.overflow="";}
+
 function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;if(Number(p.price)===0){sendWhatsApp(`Hello ARKS ONE, I would like to enquire about: ${p.name}`);return;}const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});save();renderCart();toast("Added to your cart.");}
 function sendWhatsApp(message){
   if(!STORE.whatsappNumber||STORE.whatsappNumber.includes("REPLACE")){toast("Set your WhatsApp number in app.js before using order links.");return;}
   const url=`https://wa.me/${STORE.whatsappNumber}?text=${encodeURIComponent(message)}`;window.open(url,"_blank","noopener");
 }
 $("#categoryList").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;activeCategory=b.dataset.category;$("#categoryFilter").value=activeCategory;renderCategories();renderProducts();$("#shop").scrollIntoView({behavior:"smooth"});});
-$("#productGrid").addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b)addToCart(b.dataset.add);});
+$("#productGrid").addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b){e.stopPropagation();addToCart(b.dataset.add);return;}const card=e.target.closest("[data-product-detail]");if(card)openProductDetails(card.dataset.productDetail);});
+$("#productGrid").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-product-detail]")){e.preventDefault();openProductDetails(e.target.dataset.productDetail);}});
+document.querySelector("[data-product-close]")?.addEventListener("click",closeProductDetails);
+$("#productDetailsModal")?.addEventListener("click",e=>{if(e.target.id==="productDetailsModal")closeProductDetails();});
+$("#detailImageZoom")?.addEventListener("click",()=>{const source=$("#detailProductImage").src;if(!source)return;$("#zoomedProductImage").src=source;$("#zoomedProductImage").alt=$("#detailProductImage").alt;$("#imageZoomModal").classList.remove("hidden");});
+document.querySelector("[data-zoom-close]")?.addEventListener("click",()=>$("#imageZoomModal").classList.add("hidden"));
+$("#imageZoomModal")?.addEventListener("click",e=>{if(e.target.id==="imageZoomModal")$("#imageZoomModal").classList.add("hidden");});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeProductDetails();$("#imageZoomModal")?.classList.add("hidden");}});
 $("#searchInput").addEventListener("input",renderProducts);
 $("#categoryFilter").addEventListener("change",()=>{activeCategory=$("#categoryFilter").value;renderCategories();renderProducts();});
 $("#sortFilter").addEventListener("change",renderProducts);
