@@ -172,3 +172,8 @@
 .detail-variant-group select { width:100%; min-height:44px; padding:10px 12px; border:1px solid #d5deec; border-radius:10px; background:#fff; color:#203454; font:inherit; }
 .detail-variant-group select:focus { outline:2px solid #f36b32; outline-offset:2px; }
 @media(max-width:420px) { .detail-variants { grid-template-columns:1fr; } }
+
+/* Product photo picker and mobile admin form */
+.admin-photo-preview{display:block;max-width:100%;width:150px;max-height:150px;object-fit:contain;border:1px solid var(--line);border-radius:10px;padding:5px;background:#f7f9fc;margin-top:8px}
+.admin-form textarea{width:100%;border:1px solid #e2e4e9;border-radius:10px;padding:12px;font:inherit;font-size:13px;resize:vertical}
+.admin-form input[type=file]{padding:9px;background:#f8fafc}

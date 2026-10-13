@@ -163,11 +163,40 @@ $("#checkoutForm").addEventListener("submit",e=>{
   const msg=`ARKS ONE ORDER REQUEST\n\nCustomer: ${data.name}\nPhone: ${data.phone}\nAddress: ${data.address}\nPayment preference: ${data.payment}\n\nItems:\n${lines.join("\n")}\n\nEstimated total: ${money(total)}\nNotes: ${data.notes||"None"}\n\nPlease confirm stock, delivery charge and final total.`;
   sendWhatsApp(msg);closeModal("checkoutModal");
 });
+let pendingProductPhoto = "";
+function resizeProductPhoto(file){
+  return new Promise((resolve,reject)=>{
+    if(!file){resolve("");return;}
+    if(!file.type.startsWith("image/")){reject(new Error("Please choose an image file."));return;}
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error("Could not read this photo."));
+    reader.onload=()=>{
+      const image=new Image();
+      image.onerror=()=>reject(new Error("Could not open this photo."));
+      image.onload=()=>{
+        const max=1000, scale=Math.min(1,max/Math.max(image.width,image.height));
+        const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));
+        const ctx=canvas.getContext("2d");ctx.drawImage(image,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL("image/jpeg",0.78));
+      };
+      image.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 $("#adminOpen").addEventListener("click",()=>openModal("adminModal"));
+$("#adminProductPhoto")?.addEventListener("change",async e=>{
+  const file=e.target.files?.[0],preview=$("#adminPhotoPreview");pendingProductPhoto="";
+  if(!file){preview.classList.add("hidden");preview.removeAttribute("src");return;}
+  try{pendingProductPhoto=await resizeProductPhoto(file);preview.src=pendingProductPhoto;preview.classList.remove("hidden");}
+  catch(err){toast(err.message||"Could not process photo.");e.target.value="";preview.classList.add("hidden");}
+});
 $("#adminForm").addEventListener("submit",e=>{
-  e.preventDefault();const d=Object.fromEntries(new FormData(e.currentTarget).entries());
-  products.unshift({id:"p"+Date.now(),name:d.name.trim(),category:d.category,price:Number(d.price),emoji:d.emoji||"📦",description:d.description||"",tag:"NEW"});
-  save();renderProducts();e.currentTarget.reset();toast("Product added to this browser only.");
+  e.preventDefault();const form=e.currentTarget,d=Object.fromEntries(new FormData(form).entries());
+  const product={id:"p"+Date.now(),name:d.name.trim(),category:d.category,price:Number(d.price),emoji:d.emoji||"📦",description:d.description||"",image_url:pendingProductPhoto, sizes:(d.sizes||"").split(/[,|;]/).map(x=>x.trim()).filter(Boolean), colors:(d.colors||"").split(/[,|;]/).map(x=>x.trim()).filter(Boolean), stock_quantity:d.stock_quantity===""?null:Number(d.stock_quantity),tag:"NEW"};
+  products.unshift(product);
+  try{save();renderProducts();form.reset();pendingProductPhoto="";$("#adminPhotoPreview")?.classList.add("hidden");closeModal("adminModal");toast("Product added in this browser only. It is not published to the live store.");}
+  catch(err){products=products.filter(p=>p.id!==product.id);toast("Could not save. Try a smaller photo or remove older demo products.");}
 });
 $("#exportProducts").addEventListener("click",()=>{
   const blob=new Blob([JSON.stringify(products,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="arks-one-products.json";a.click();URL.revokeObjectURL(url);

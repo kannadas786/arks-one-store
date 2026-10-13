@@ -193,18 +193,22 @@
 
   <div id="adminModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
     <div class="modal admin-modal">
-      <div class="drawer-heading"><div><span class="eyebrow">LOCAL DEMO TOOLS</span><h2 id="adminTitle">Store admin</h2></div><button class="icon-button" data-close="adminModal" aria-label="Close admin">×</button></div>
-      <div class="notice"><b>Important:</b> This demo admin saves changes only in this browser on this device. It is not a secure multi-user admin panel and does not sync to other visitors. Do not enter confidential information.</div>
+      <div class="drawer-heading"><div><span class="eyebrow">LOCAL DEMO TOOLS</span><h2 id="adminTitle">Add a product</h2></div><button class="icon-button" data-close="adminModal" aria-label="Close admin">×</button></div>
+      <div class="notice"><b>Important:</b> Important: this temporary product form saves only in this browser on this device. It does not upload photos/products to your live store or Supabase. For live shared product management, a secure admin/database connection is still required.</div>
       <form id="adminForm" class="admin-form">
         <label>Product name<input name="name" required maxlength="90" placeholder="e.g. USB-C charging cable"></label>
         <label>Category<select name="category" id="adminCategory" required></select></label>
         <label>Price (₹)<input name="price" required type="number" min="0" step="1" placeholder="499"></label>
+        <label>Product photo<input name="productPhoto" id="adminProductPhoto" type="file" accept="image/*"><small class="fine-print">Choose a photo from your phone. It is resized before saving.</small><img id="adminPhotoPreview" class="admin-photo-preview hidden" alt="Product photo preview"></label>
         <label>Emoji / icon<input name="emoji" maxlength="8" placeholder="📦"></label>
-        <label>Short description<input name="description" maxlength="180" placeholder="A brief product description"></label>
+        <label>Product description<textarea name="description" rows="3" maxlength="1000" placeholder="Full product description, features, compatibility..."></textarea></label>
+        <label>Available sizes<input name="sizes" placeholder="S, M, L, XL (optional)"></label>
+        <label>Available colours<input name="colors" placeholder="Black, White, Blue (optional)"></label>
+        <label>Stock quantity<input name="stock_quantity" type="number" min="0" step="1" placeholder="10"></label>
         <button class="primary-button full-width" type="submit">Add product to this browser</button>
       </form>
       <div class="admin-actions"><button id="exportProducts" class="secondary-button" type="button">Export products JSON</button><button id="resetProducts" class="secondary-button danger" type="button">Reset demo products</button></div>
-      <p class="fine-print">Before launch, connect a real database and secure admin authentication to manage a shared store.</p>
+      <p class="fine-print">Photos and products added here are visible only in this browser. Use small photos; clear site data or another device will not have these changes.</p>
     </div>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
