@@ -18,10 +18,52 @@
     </div>
   </header>
   <main>
-    <section class="hero-banner" aria-label="ARKS ONE shopping banner">
-      <a href="#shop" aria-label="Shop ARKS ONE products">
-        <img src="arks-one-home-banner.png" alt="ARKS ONE — Shop smarter, live better. Everything you need in one place." fetchpriority="high">
-      </a>
+    <section class="hero-slider" aria-label="ARKS ONE promotions">
+      <div class="hero-slides" id="heroSlides">
+        <article class="hero-slide hero-slide-image is-active" data-slide="0">
+          <a href="#shop" aria-label="Shop ARKS ONE products">
+            <img src="arks-one-home-banner.png" alt="ARKS ONE — Shop smarter, live better. Everything you need in one place." fetchpriority="high">
+          </a>
+        </article>
+        <article class="hero-slide promo-ad-slide" data-slide="1">
+          <div class="promo-copy">
+            <span class="promo-label">ARKS ONE • PRODUCT SPOTLIGHT</span>
+            <h2>Good products.<br><em>Smarter choices.</em></h2>
+            <p>Explore electronics, smart home essentials, fashion, tools and more—all in one place.</p>
+            <a class="promo-cta" href="#shop">Explore the store <span>→</span></a>
+          </div>
+          <div class="promo-art" aria-hidden="true"><span>📱</span><span>🎧</span><span>💡</span><span>📹</span></div>
+        </article>
+        <article class="hero-slide promo-coming-slide" data-slide="2">
+          <div class="promo-copy">
+            <span class="promo-label">COMING SOON</span>
+            <h2>More offers.<br><em>More to discover.</em></h2>
+            <p>New deals and seasonal promotions are on the way. Check back soon for updates.</p>
+            <a class="promo-cta" href="#shop">Browse available products <span>→</span></a>
+          </div>
+          <div class="coming-badge" aria-hidden="true"><span>COMING</span><strong>SOON</strong><small>NEW DEALS</small></div>
+        </article>
+        <article class="hero-slide promo-brands-slide" data-slide="3">
+          <div class="promo-copy">
+            <span class="promo-label">BRANDS & CATEGORIES</span>
+            <h2>Your favourites.<br><em>One destination.</em></h2>
+            <p>Discover products across technology, home, security, networking, lifestyle and construction.</p>
+            <a class="promo-cta" href="#categoryList">Explore categories <span>→</span></a>
+          </div>
+          <div class="brand-pills" aria-label="Featured categories"><span>TECH</span><span>SMART HOME</span><span>SECURITY</span><span>LIFESTYLE</span><span>TOOLS</span></div>
+        </article>
+      </div>
+      <button class="hero-arrow hero-prev" type="button" aria-label="Previous promotion">‹</button>
+      <button class="hero-arrow hero-next" type="button" aria-label="Next promotion">›</button>
+      <div class="hero-slider-bottom">
+        <div class="hero-dots" id="heroDots" aria-label="Choose promotion">
+          <button class="hero-dot is-active" type="button" data-go-slide="0" aria-label="Slide 1"></button>
+          <button class="hero-dot" type="button" data-go-slide="1" aria-label="Slide 2"></button>
+          <button class="hero-dot" type="button" data-go-slide="2" aria-label="Slide 3"></button>
+          <button class="hero-dot" type="button" data-go-slide="3" aria-label="Slide 4"></button>
+        </div>
+        <span class="slider-hint">Swipe or use arrows to explore</span>
+      </div>
     </section>
 
     <section class="category-section">
@@ -29,6 +71,43 @@
       <div id="categoryList" class="category-list"></div>
     </section>
 
+    <section class="video-promotions section-wrap" id="videoPromotions" aria-labelledby="videoPromoTitle">
+      <div class="section-heading">
+        <div><span class="section-kicker">WATCH • DISCOVER • SHOP</span><h2 id="videoPromoTitle">Video Ads & Promotions</h2><p>Product highlights, offer announcements and brand stories from ARKS ONE.</p></div>
+      </div>
+      <div class="video-promo-grid">
+        <article class="video-promo-card">
+          <div class="video-poster poster-products">
+            <img src="arks-one-home-banner.png" alt="ARKS ONE shopping promotion poster" loading="lazy">
+            <span class="poster-chip">STORE PROMO</span>
+            <button class="video-play" type="button" data-video-play="promo-store.mp4" data-video-poster="arks-one-home-banner.png" aria-label="Play store promotional video">▶</button>
+          </div>
+          <div class="video-promo-info"><h3>ARKS ONE Store Promo</h3><p>Introduce your store and featured product range.</p><span class="video-format">MP4 · WebM supported</span></div>
+        </article>
+        <article class="video-promo-card">
+          <div class="video-poster poster-offers">
+            <div class="poster-art"><span>COMING</span><strong>OFFERS</strong><small>NEW DEALS SOON</small></div>
+            <span class="poster-chip">OFFER TEASER</span>
+            <button class="video-play" type="button" data-video-play="promo-offers.mp4" data-video-poster="arks-one-home-banner.png" aria-label="Play upcoming offers video">▶</button>
+          </div>
+          <div class="video-promo-info"><h3>Coming Offers</h3><p>Promote upcoming deals, seasonal sales and special announcements.</p><span class="video-format">MP4 · WebM supported</span></div>
+        </article>
+        <article class="video-promo-card">
+          <div class="video-poster poster-brands">
+            <div class="poster-brand-grid"><span>TECH</span><span>HOME</span><span>SECURITY</span><span>LIFESTYLE</span></div>
+            <span class="poster-chip">BRAND SPOTLIGHT</span>
+            <button class="video-play" type="button" data-video-play="promo-brands.mp4" data-video-poster="arks-one-home-banner.png" aria-label="Play brand promotion video">▶</button>
+          </div>
+          <div class="video-promo-info"><h3>Brand Promotion</h3><p>Feature products, categories and partner brands.</p><span class="video-format">MP4 · WebM supported</span></div>
+        </article>
+      </div>
+      <p class="video-upload-note">To activate a video card, upload your video using the filename shown in the card, or update its video filename in <code>index.html</code>. Recommended: MP4 (H.264/AAC), 16:9, 720p or 1080p. WebM is also supported.</p>
+    </section>
+    <div class="video-modal hidden" id="videoModal" role="dialog" aria-modal="true" aria-label="Promotional video player">
+      <button class="video-modal-close" type="button" data-video-close aria-label="Close video">×</button>
+      <video id="promoVideoPlayer" controls playsinline preload="metadata"></video>
+      <p id="videoPlayerMessage" class="video-player-message"></p>
+    </div>
     <section id="shop" class="shop-section">
       <div class="section-heading"><div><span class="eyebrow">THE COLLECTION</span><h2>Featured products</h2></div><span id="productSummary" class="muted"></span></div>
       <div class="shop-controls">

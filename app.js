@@ -103,3 +103,78 @@ $("#serviceWhatsApp").addEventListener("click",e=>{if(STORE.whatsappNumber.inclu
 $("#footerContact").addEventListener("click",()=>sendWhatsApp("Hello ARKS ONE, I have a question."));
 $("#year").textContent=new Date().getFullYear();
 renderCategories();renderProducts();renderCart();
+
+
+/* Multi-slide homepage promotions: auto-rotate, arrows, dots, and touch swipe. */
+(() => {
+  const slider = document.querySelector(".hero-slider");
+  if (!slider) return;
+  const slides = Array.from(slider.querySelectorAll(".hero-slide"));
+  const dots = Array.from(slider.querySelectorAll("[data-go-slide]"));
+  const prev = slider.querySelector(".hero-prev");
+  const next = slider.querySelector(".hero-next");
+  let current = 0;
+  let timer;
+  const show = (index) => {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((slide, i) => slide.classList.toggle("is-active", i === current));
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("is-active", i === current);
+      dot.setAttribute("aria-current", i === current ? "true" : "false");
+    });
+  };
+  const start = () => { clearInterval(timer); timer = setInterval(() => show(current + 1), 5000); };
+  prev?.addEventListener("click", () => { show(current - 1); start(); });
+  next?.addEventListener("click", () => { show(current + 1); start(); });
+  dots.forEach(dot => dot.addEventListener("click", () => { show(Number(dot.dataset.goSlide)); start(); }));
+  slider.addEventListener("mouseenter", () => clearInterval(timer));
+  slider.addEventListener("mouseleave", start);
+  let touchStart = null;
+  slider.addEventListener("touchstart", e => { touchStart = e.changedTouches[0].clientX; }, {passive:true});
+  slider.addEventListener("touchend", e => {
+    if (touchStart === null) return;
+    const dx = e.changedTouches[0].clientX - touchStart;
+    if (Math.abs(dx) > 45) show(current + (dx < 0 ? 1 : -1));
+    touchStart = null;
+    start();
+  }, {passive:true});
+  show(0);
+  start();
+})();
+
+
+/* Compatible local promotional video player for MP4/WebM files. */
+(() => {
+  const modal = document.querySelector("#videoModal");
+  const player = document.querySelector("#promoVideoPlayer");
+  const message = document.querySelector("#videoPlayerMessage");
+  if (!modal || !player) return;
+  document.querySelectorAll("[data-video-play]").forEach(button => {
+    button.addEventListener("click", () => {
+      const src = button.dataset.videoPlay;
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      player.pause();
+      player.removeAttribute("src");
+      player.load();
+      player.src = src;
+      player.poster = button.dataset.videoPoster || "";
+      message.textContent = `Loading ${src}… If it does not play, upload this video file to the website root. Supported formats: MP4 (H.264/AAC) and WebM.`;
+      player.onerror = () => {
+        message.textContent = `Video file "${src}" is not uploaded yet or could not be played. Upload a compatible MP4/WebM file to the website root, then try again.`;
+      };
+      player.onloadedmetadata = () => { message.textContent = ""; };
+      player.play().catch(() => {});
+    });
+  });
+  const close = () => {
+    player.pause();
+    player.removeAttribute("src");
+    player.load();
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+  };
+  modal.querySelector("[data-video-close]")?.addEventListener("click", close);
+  modal.addEventListener("click", e => { if (e.target === modal) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !modal.classList.contains("hidden")) close(); });
+})();
